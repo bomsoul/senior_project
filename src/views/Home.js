@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../firebase';
 
-const db = firebase.firestore();
+const db=firebase.firestore();
 
 export default class Home extends Component {
   constructor(props){

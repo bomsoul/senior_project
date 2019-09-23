@@ -9,6 +9,7 @@ class Header extends Component {
           <Link to="/">Home</Link>
           <Link to="/photo">Photo Input</Link>
           <Link to="/camera">Video Camera</Link>
+          <Link to="/addstudent">Add Student</Link>
         </div>
       </header>
     );

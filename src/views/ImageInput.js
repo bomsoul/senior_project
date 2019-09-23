@@ -119,6 +119,11 @@ class ImageInput extends Component {
 
     return (
       <div>
+        <div>
+          {
+            this.state.match == null ? <p>No face detect</p>:<p>{this.state.match.length} face detect</p>
+          }
+        </div>
         <input
           id="myFileUpload"
           type="file"
@@ -132,6 +137,7 @@ class ImageInput extends Component {
             // for(var face in this.state.match)
             //   <p>{this.state.match[face]._label}</p>
             this.state.match == null ? <h1></h1>:
+            
             this.state.match.map((key,index)=>
               key._label == 'unknown' ?  <b></b>: 
               <div className="container-fluid">

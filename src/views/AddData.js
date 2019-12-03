@@ -20,7 +20,6 @@ const INIT_STATE = {
 };
 
 const db=firebase.firestore();
-
 class AddData extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +27,8 @@ class AddData extends Component {
             image: null,
             name : "",
             stdId: "",
-            urllink: ""
+            urllink: "",
+          
         };
       }
     
@@ -39,10 +39,10 @@ class AddData extends Component {
     
       handleImage = async (image = this.state.imageURL) => {
         await getFullFaceDescription(image).then(fullDesc => {
-          console.log(fullDesc);
+          console.log(fullDesc[0].descriptor);
           if (!!fullDesc) {
             this.setState({
-              fullDesc,
+              fullDesc : fullDesc[0].descriptor,
               detections: fullDesc.map(fd => fd.detection)
             });
           }
@@ -64,14 +64,19 @@ class AddData extends Component {
       };
     
       handleNameChange = (e)=>{
-          this.state.name = e.target.value;
+        this.setState({
+          name : e.target.value
+        })
       }
 
       handleStdIdChange = (e) =>{
-        this.state.stdId = e.target.value;
+        this.setState({
+          stdId : e.target.value
+        })
       }
     
       handleUpload = () =>{
+        console.log(this.state.fullDesc);
         const {image} = this.state;
         const uploadTask = storage.ref('profile/'+image.name).put(image);
         uploadTask.on('state_changed',
@@ -84,14 +89,19 @@ class AddData extends Component {
         () => {
             storage.ref('profile').child(image.name).getDownloadURL().then(url =>{
                 console.log(url);
+                console.log(this.state.fullDesc);
                 this.state.urllink = url.toString();
-                db.collection('student').add({
+                var data ={
                     imageURL: this.state.urllink,
                     name: this.state.name,
                     stdId: this.state.stdId,
-                    descriptors: this.state.fullDesc
-                });
-                alert('Upload Complete!!')
+                    descriptors: Array.from(this.state.fullDesc)
+                }
+                db.collection("student").doc().set(data).then(function() {
+                  console.log("Document successfully written!");
+                  alert("Add data Successful")
+                  this.props.history.push('/');
+              });
             })
         });
     }
@@ -146,6 +156,7 @@ class AddData extends Component {
                                 name = "fullname"
                                 className ="form-control"
                                 onChange = {this.handleNameChange}
+                                value={this.state.name}
                             />
                         </div>
                         <div className="form-inline">
@@ -154,6 +165,8 @@ class AddData extends Component {
                                 placeholder="Enter your studentID"
                                 name = "stdID"
                                 className ="form-control"
+                                onChange={this.handleStdIdChange}
+                                value={this.state.stdId }
                             />
                         </div>
                         <button className="btn btn-success" onClick={this.handleUpload}>Add to Database</button>

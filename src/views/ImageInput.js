@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
+import axios from 'axios';
 
 // Import image to test API
 //const testImg = require('../img/test.jpg');
 
 // Import face profile
 const JSON_PROFILE = require('../descriptors/bnk48.json');
+// const JSON_PROFILE = axios.get('http://localhost:4000/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
+//                       .then(response =>{
+//                         console.log(response.data)
+//                       }).catch(function(error){
+//                         console.log(error)
+//                       })
 
 // Initial State
 const INIT_STATE = {
@@ -118,6 +125,7 @@ class ImageInput extends Component {
     }
 
     return (
+      
       <div>
         <div>
           {

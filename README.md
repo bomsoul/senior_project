@@ -53,7 +53,7 @@ API Format:
 	"stdID" : "studentID"
   },
   "STUDENT_2": {
-    "name": "nickname",
+    "name": "fullname",
     "descriptors": [
       [FEATURE_VECTOR],[FEATURE_VECTOR],...
     ],

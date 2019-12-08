@@ -6,7 +6,7 @@ Web Application with Facial Recognition to check student attendent running in fr
 
 ## Demo
 
-**[Check out the Demo in Github Page](https://supachaic.github.io/bnk48-face-recognition/)**
+**[Check out the Demo in Github Page]()**
 
 ## How to Run App in localhost
 

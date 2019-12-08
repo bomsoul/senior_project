@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## How to create descriptors profile
 
-This App uses descriptors profile of known faces (facial feature vector of 128 array of number) stored in JSON format as reference for face recognition. The sample profile of BNK48 current members (as of December 2018) is located in folder `src/descriptors/bnk48.json`
+This App uses descriptors profile of known faces (facial feature vector of 128 array of number) stored in JSON format as reference for face recognition. The sample data is located in `localhost:4000/fetch`
 
 ### API format
 

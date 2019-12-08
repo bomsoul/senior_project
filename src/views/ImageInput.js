@@ -3,17 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
 
-// Import image to test API
-//const testImg = require('../img/test.jpg');
-
 // Import face profile
-const JSON_PROFILE = require('../descriptors/bnk48.json');
-// const JSON_PROFILE = axios.get('http://localhost:4000/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
-//                       .then(response =>{
-//                         console.log(response.data)
-//                       }).catch(function(error){
-//                         console.log(error)
-//                       })
+let JSON_PROFILE = require('../descriptors/bnk48.json');
+
 
 // Initial State
 const INIT_STATE = {
@@ -30,7 +22,22 @@ class ImageInput extends Component {
     this.state = { ...INIT_STATE, faceMatcher: null };
   }
 
+  componentDidMount = async () =>{
+    axios.get('http://localhost:4000/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
+    .then(response =>{
+      JSON_PROFILE = response.data;
+    }).catch(function(error){
+      console.log(error)
+    })
+  }
+
+
   componentWillMount = async () => {
+    let profile = await axios.get('http://localhost:4000/fetch',
+                              {headers: {'Access-Control-Allow-Origin': '*',
+                              'Access-Control-Allow-Methods':'GET'}})
+    JSON_PROFILE = profile.data
+    console.log(JSON_PROFILE)
     await loadModels();
     this.setState({ faceMatcher: await createMatcher(JSON_PROFILE) });
     await this.handleImage(this.state.imageURL);

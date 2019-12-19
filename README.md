@@ -1,4 +1,4 @@
-# I am Here (Senior Prject)
+# I am Here (Senior Project)
 
 Web Application with Facial Recognition to check student attendent running in front-end browser using React and [face-api.js](https://github.com/justadudewhohacks/face-api.js) (with back-end NodeJS, ExpressJS and Firebase as a storage/database)
 
@@ -66,7 +66,7 @@ API Format:
 
 Note:
 
-- `MEMBER_1`, `MEMBER_2` are object keys to be referred by the App
+- `STUDENT_1`, `STUDENT_2` are object keys to be referred by the App
 - `nickname` will be displayed when app recognizes the face
 - `FEATURE_VECTOR` is array of 128 number facial feature known as `descriptor` in face-api.js
 - `ImageURL` is a string of image storage link.

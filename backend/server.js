@@ -29,6 +29,8 @@ var storage = firebase.storage();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+
+
 app.get('/fetch', function (req, res) {
     var data = "{"
     db.collection('student').get().then((snapshot)=>{
@@ -44,37 +46,57 @@ app.get('/fetch', function (req, res) {
     });
 });
 
-app.post('/add' ,function(req,res){
-    console.log(req.body);
-    const {image} = req.body;
-    const uploadTask = storage.ref('profile/'+image.name).put(image);
-    uploadTask.on('state_changed',
-    (snapshot) =>{
-
-    },
-    (error) => {
-        console.log(error);
-    },
-    () => {
-        storage.ref('profile').child(image.name).getDownloadURL().then(url =>{
-            console.log("TEST")
-            console.log(url);
-            console.log(req.fullDesc);
-            var urllink = url.toString();
-            var data ={
-                imageURL: urllink,
-                name: req.name,
-                stdId: req.stdId,
-                descriptors: Array.from(req.fullDesc)
-            }
-            db.collection("student").doc().set(data).then(function() {
-              console.log("Document successfully written!");
-            //   alert("Add data Successful")
-            //   this.props.history.push('/');
-          });
-        })
-    });
+app.get('/student',function(req,res){
+    var data = '[';
+    db.collection('student').get().then((snapshot)=>{
+        snapshot.forEach(doc=>{
+            // this.state.url = doc.data().urls;
+            console.log(doc.data().name);
+            data += '{'
+                data += '"imageURL": "' + doc.data().imageURL + '",';
+                data += '"name": "' + doc.data().name + '",';
+                data += '"stdId": "' + doc.data().stdId + '"';
+            data += '},'
+            })
+        data = data.substring(0,data.length-1);
+        data += "]";
+        res.send((JSON.parse(data)));
+    })
 })
+
+// app.post('/add' ,function(req,res)
+// {
+//     console.log(req.body.imageURL);
+//     // console.log('1', req.body.image_name, req.body.fullDesc, req.body.image);
+//     // console.log('2', req.image_name, req.fullDesc, image);
+//     const uploadTask = storage.ref('profile/'+req.body.imageURL).put(req.body.image);
+//     uploadTask.on('state_changed',
+//     (snapshot) =>{
+
+//     },
+//     (error) => {
+//         console.log(error);
+//     },
+//     () => {
+//         storage.ref('profile').child(req.body.imageURL).getDownloadURL().then(url =>{
+//             console.log("TEST")
+//             console.log(url);
+//             console.log(req.fullDesc);
+//             var urllink = url.toString();
+//             var data ={
+//                 imageURL: urllink,
+//                 name: req.body.name,
+//                 stdId: req.body.stdId,
+//                 descriptors: Array.from(req.body.fullDesc)
+//             }
+//             db.collection("student").doc().set(data).then(function() {
+//               console.log("Document successfully written!");
+//             //   alert("Add data Successful")
+//             //   this.props.history.push('/');
+//           });
+//         })
+//     });
+// })
 app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);

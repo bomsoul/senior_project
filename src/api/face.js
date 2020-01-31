@@ -31,7 +31,7 @@ export async function getFullFaceDescription(blob, inputSize = 512) {
 }
 
 export async function createMatcher(faceProfile) {
-  // Create labeled descriptors of member from profile
+  // Create labeled descriptors from profile
   let members = Object.keys(faceProfile);
   let labeledDescriptors = members.map(
     member =>

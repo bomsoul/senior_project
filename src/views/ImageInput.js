@@ -4,7 +4,7 @@ import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
 
 // Import face profile
-let JSON_PROFILE = require('../descriptors/bnk48.json');
+let JSON_PROFILE = require('../descriptors/profile.json');
 
 
 // Initial State

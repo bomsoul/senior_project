@@ -2,16 +2,25 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class Header extends Component {
+
   render() {
     return (
-      <header>
-        <div className="Navbar">
-          <Link to="/">Home</Link>
-          <Link to="/photo">Photo Input</Link>
-          <Link to="/camera">Video Camera</Link>
-          <Link to="/addstudent">Add Student</Link>
-        </div>
-      </header>
+          <div className="navbar navbar-expand-sm bg-dark navbar-dark">
+            <ul className="navbar-nav">
+          <li className="nav-item">
+            <div className="nav-link"><Link to="/home">Home</Link></div>
+          </li>
+          <li className="nav-item">
+            <div className="nav-link"><Link to="/photo">Photo Input</Link></div>
+          </li>
+          <li className="nav-item">
+            <div className="nav-link"><Link to="/camera">Video Camera</Link></div>
+          </li>
+          <li className="nav-item">
+            <div className="nav-link"><Link to="/addstudent">Add Student</Link></div>
+          </li>
+          </ul>
+          </div>
     );
   }
 }

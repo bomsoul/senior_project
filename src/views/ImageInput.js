@@ -133,7 +133,8 @@ class ImageInput extends Component {
 
     return (
       
-      <div>
+      <center>
+        <div>
         <div>
           {
             this.state.match == null ? <p>No face detect</p>:<p>{this.state.match.length} face detect</p>
@@ -181,6 +182,7 @@ class ImageInput extends Component {
         </div>
 
       </div>
+      </center>
     );
   }
 }

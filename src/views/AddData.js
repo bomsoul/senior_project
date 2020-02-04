@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
-import { storage } from '../firebase';
+import { storage } from '../firebase/firebase';
 import firebase from 'firebase';
 import axios from 'axios';
 
@@ -151,7 +151,8 @@ class AddData extends Component {
         }
     
         return (
-          <div>
+          <center>
+            <div>
             <input
               id="myFileUpload"
               type="file"
@@ -195,6 +196,7 @@ class AddData extends Component {
             </div>
             
           </div>
+          </center>
         );
       }
     }    

@@ -37,7 +37,6 @@ class ImageInput extends Component {
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
     JSON_PROFILE = profile.data
-    console.log(JSON_PROFILE)
     await loadModels();
     this.setState({ faceMatcher: await createMatcher(JSON_PROFILE) });
     await this.handleImage(this.state.imageURL);

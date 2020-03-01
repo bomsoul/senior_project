@@ -35,7 +35,6 @@ class SignUp extends Component{
             var errorMessage = error.message;
             // ...
           });
-
     }
 
     render(){

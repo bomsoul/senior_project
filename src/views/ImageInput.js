@@ -69,11 +69,6 @@ class ImageInput extends Component {
     }
   };
 
-  // getObject = () =>{
-  //   for(var object in JSON_PROFILE){
-  //     console.log(JSON_PROFILE[object].descriptors.toString());
-  //   }
-  // }
 
   handleFileChange = async event => {
     this.resetState();
@@ -149,8 +144,6 @@ class ImageInput extends Component {
           <div style={{ position: 'absolute' }}>
             <img src={imageURL} alt="imageURL"  />
             {
-            // for(var face in this.state.match)
-            //   <p>{this.state.match[face]._label}</p>
             this.state.match == null ? <h1></h1>:
             
             this.state.match.map((key,index)=>

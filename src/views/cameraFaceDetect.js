@@ -21,7 +21,8 @@ class CameraFaceDetect extends Component {
       descriptors: null,
       faceMatcher: null,
       match: null,
-      facingMode: null
+      facingMode: null,
+      matchList: new Set()
     };
   }
 
@@ -94,6 +95,14 @@ class CameraFaceDetect extends Component {
       }
     }
   };
+
+  onDetect = (index) =>{
+    if(index !== 'unknown'){
+      this.setState(({ matchList }) => ({
+        matchList: new Set(matchList).add(index)
+      }));
+    }
+  }
 
   render() {
     const { detections, match, facingMode } = this.state;
@@ -184,7 +193,9 @@ class CameraFaceDetect extends Component {
             {!!drawBox ? drawBox : null}
           </div>
         </div>
+            {Array.from(this.state.matchList).map((match, index) =><p>{match}</p>)}
       </div>
+      
     );
   }
 }

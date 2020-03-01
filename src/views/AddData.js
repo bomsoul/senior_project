@@ -5,12 +5,6 @@ import { storage } from '../firebase/firebase';
 import firebase from 'firebase';
 import axios from 'axios';
 
-// Import image to test API
-//const testImg = require('../img/test.jpg');
-
-// Import face profile
-//const JSON_PROFILE = require('../descriptors/bnk48.json');
-
 // Initial State
 const INIT_STATE = {
   imageURL: null,
@@ -77,20 +71,6 @@ class AddData extends Component {
       }
     
       handleUpload = () =>{
-        console.log(this.state.fullDesc);
-        console.log(this.state.image.name);
-        console.log(this.state);
-        // form_data.append('image', this.state.image);
-        // form_data.append('image_name', this.state.image.name);
-        // form_data.append('fullDesc', this.state.fullDesc);
-        // form_data.append('name', this.state.name);
-        // form_data.append('stdId', this.state.stdId);
-        // axios.post('http://localhost:4000/add', this.state, {
-        // })
-        // .then(response =>{ 
-        //   this.props.history.push('/');
-        // })
-        //--------------------------
         const {image} = this.state;
         const uploadTask = storage.ref('profile/'+image.name).put(image);
         uploadTask.on('state_changed',
@@ -102,8 +82,6 @@ class AddData extends Component {
         },
         () => {
             storage.ref('profile').child(image.name).getDownloadURL().then(url =>{
-                console.log(url);
-                console.log(this.state.fullDesc);
                 this.state.urllink = url.toString();
                 var data ={
                     imageURL: this.state.urllink,
@@ -114,7 +92,6 @@ class AddData extends Component {
                 db.collection("student").doc().set(data).then(function() {
                   console.log("Document successfully written!");
                   alert("Add data Successful")
-                  //this.props.history.push('/');
               });
             })
         });

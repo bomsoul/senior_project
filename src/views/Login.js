@@ -65,7 +65,6 @@ class Login extends Component{
                 email : '',
                 password: ''
             })
-
     }
 
     render(){

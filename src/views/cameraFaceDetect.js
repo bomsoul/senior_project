@@ -36,7 +36,7 @@ class CameraFaceDetect extends Component {
   }
 
   componentWillMount = async () => {
-    let profile = await axios.get('https://seniorbackend1.herokuapp.com//fetch',
+    let profile = await axios.get('https://seniorbackend1.herokuapp.com/fetch',
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
     JSON_PROFILE = profile.data

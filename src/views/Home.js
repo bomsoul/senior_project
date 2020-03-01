@@ -11,7 +11,7 @@ export default class Home extends Component {
 
   componentDidMount(){
     let currentComponent = this;
-    axios.get('http://localhost:4000/student',{headers: {'Access-Control-Allow-Origin': '*',
+    axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods':'GET'}})
       .then(function(res){
         res.data.forEach(doc=>{

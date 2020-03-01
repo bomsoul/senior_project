@@ -23,7 +23,7 @@ class ImageInput extends Component {
   }
 
   componentDidMount = async () =>{
-    axios.get('http://localhost:4000/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://seniorbackend1.herokuapp.com/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       JSON_PROFILE = response.data;
     }).catch(function(error){
@@ -33,7 +33,7 @@ class ImageInput extends Component {
 
 
   componentWillMount = async () => {
-    let profile = await axios.get('http://localhost:4000/fetch',
+    let profile = await axios.get('https://seniorbackend1.herokuapp.com//fetch',
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
     JSON_PROFILE = profile.data

@@ -22,12 +22,12 @@ class CameraFaceDetect extends Component {
       faceMatcher: null,
       match: null,
       facingMode: null,
-      matchList: new Set()
+      matchList: []
     };
   }
 
   componentDidMount = async () =>{
-    axios.get('http://localhost:4000/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://seniorbackend1.herokuapp.com/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       JSON_PROFILE = response.data;
     }).catch(function(error){
@@ -36,7 +36,7 @@ class CameraFaceDetect extends Component {
   }
 
   componentWillMount = async () => {
-    let profile = await axios.get('http://localhost:4000/fetch',
+    let profile = await axios.get('https://seniorbackend1.herokuapp.com//fetch',
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
     JSON_PROFILE = profile.data
@@ -96,11 +96,14 @@ class CameraFaceDetect extends Component {
     }
   };
 
+
   onDetect = (index) =>{
     if(index !== 'unknown'){
-      this.setState(({ matchList }) => ({
-        matchList: new Set(matchList).add(index)
-      }));
+      if(this.state.matchList.indexOf(index) <= -1){
+        this.setState({
+          matchList: [...this.state.matchList,index]
+        })
+      }
     }
   }
 
@@ -151,6 +154,7 @@ class CameraFaceDetect extends Component {
                     color: '#fff',
                     transform: `translate(-3px,${_H}px)`
                   }}
+                  onChange= {this.onDetect(match[i]._label)}
                 >
                   {match[i]._label}
                 </p>
@@ -193,7 +197,23 @@ class CameraFaceDetect extends Component {
             {!!drawBox ? drawBox : null}
           </div>
         </div>
-            {Array.from(this.state.matchList).map((match, index) =><p>{match}</p>)}
+            {Array.from(this.state.matchList).map((match, index) =><div className="container-fluid">
+              <div className="row">
+                  <div className="col-12 mt-3">
+                      <div className="card">
+                          <div className="card-horizontal">
+                              <div className="img-square-wrapper">
+                                  <img className="" src="" width="300" height="180" alt="Card image cap"/>
+                              </div>
+                              <div className="card-body">
+                                  <h4 className="card-title">{match}</h4>
+                                  <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>)}
       </div>
       
     );

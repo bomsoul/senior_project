@@ -23,7 +23,7 @@ class Login extends Component{
                 currentUser: user
               })
             }
-          })
+        })
     }
 
     logOut = e => {
@@ -71,64 +71,83 @@ class Login extends Component{
         const { message, currentUser } = this.state
         if (currentUser) {
             return (
-                     <div>
-                        <div className="navbar navbar-expand-sm bg-dark navbar-dark">
-            <ul className="navbar-nav">
-          <li className="nav-item">
-            <div className="nav-link"><Link to="/home">Home</Link></div>
-          </li>
-          <li className="nav-item">
-            <div className="nav-link"><Link to="/image">Photo Input</Link></div>
-          </li>
-          <li className="nav-item">
-            <div className="nav-link"><Link to="/camera">Video Camera</Link></div>
-          </li>
-          <li className="nav-item">
-            <div className="nav-link"><Link to="/addstudent">Add Student</Link></div>
-          </li>
-          <li class="nav-item">
-                <div className="nav-link">Hello {currentUser.email}</div>
-            </li>
-          </ul>
-          
-                <button className="btn btn-outline-secondary" onClick={this.logOut}>Logout</button>
-          </div>
+              <div>
+                <div className="navbar navbar-expand-sm bg-dark navbar-dark">
+                  <ul className="navbar-nav">
+                    <li className="nav-item">
+                      <Link to="/home"><div className="nav-link">Home</div></Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="/image"><div className="nav-link">Photo Input</div></Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="/camera"><div className="nav-link">Video Camera</div></Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="/addstudent"><div className="nav-link">Add Student</div></Link>
+                    </li>
+                    <li class="nav-item">
+                      <div className="nav-link">Hello {currentUser.email}</div>
+                    </li>
+                  </ul>
+                  <button className="btn btn-outline-secondary" onClick={this.logOut}>Logout</button>
                 </div>
+              </div>
             )
           }
         return(
-            <div class="wrapper fadeInDown">
-                <div id="formContent">
-                    <div class="fadeIn first">
-                        <div id="icon">
-                            <i class="fas fa-user"></i>
+            <div className="justify-content-center align-items-center fluid">
+              <div className="row">
+                <div class="col-md-12 min-vh-100 d-flex flex-column justify-content-center">
+                  <div className="row">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                      <div class="card rounded shadow shadow-sm">
+                        <div class="card-header">
+                          <h3 class="mb-0">Login</h3>
                         </div>
+                        <div class="card-body">
+                          <form onSubmit={this.onSubmit}>
+                            {message ? <p className="text-danger">{message}</p> : null}
+                            <div className="form-group">
+                              <label for="Email">Email :</label>
+                              <input type="text" 
+                                    id="login" 
+                                    className="form-control" 
+                                    name="login" 
+                                    placeholder="Email Address"
+                                    onChange= {this.onUsernameChange}/>
+                            </div>
+                            <div className="form-group">
+                            <label for="Password">Password :</label>
+                            <input type="password" 
+                                  id="password" 
+                                  class="form-control" 
+                                  name="login" 
+                                  placeholder="Password"
+                                  onChange= {this.onPasswordChange} />
+                            </div>
+                            <div>
+                            <label class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input"/>
+                              <span class="custom-control-indicator"></span>
+                              <span class="custom-control-description small text-dark">Forgot Password?</span>
+                            </label>
+                          </div>
+                          <input type="submit" class="btn btn-primary float-right" value="Log In"/>
+                        </form>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div className="form-group">
+                        <div className="text-center">
+                            <label>New around here ? <Link to="/signup">Sign Up</Link></label>
+                        </div>
+                      </div>
                     </div>
-                    <form onSubmit={this.onSubmit}>
-                        <input type="text" 
-                                id="login" 
-                                class="fadeIn second" 
-                                name="login" 
-                                placeholder="Username or Email"
-                                onChange= {this.onUsernameChange}
-                        />
-                        <input type="password" 
-                               id="password" 
-                               class="fadeIn third" 
-                               name="login" 
-                               placeholder="Password"
-                               onChange= {this.onPasswordChange}
-                        />
-                        <input type="submit" class="fadeIn fourth" value="Log In"/>
-                        <button><Link to="/signup" className="btn btn-success">Register Account!!</Link></button>
-                    </form>
-                    <div id="formFooter">
-                        <a className="underlineHover" href="#">Forgot Password?</a>
-                    </div>
-                    {message ? <p className="help is-danger">{message}</p> : null}
+                  </div>
                 </div>
-            </div>
-            
+              </div>
+          </div>
+        </div>   
         )
     }
 }

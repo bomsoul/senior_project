@@ -6,7 +6,8 @@ class SignUp extends Component{
         super(props);
         this.state = {
             email : '',
-            password : ''
+            password : '',
+            errormessage : '',
         }
     }
 
@@ -31,8 +32,9 @@ class SignUp extends Component{
         })
         .catch(function(error) {
             // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            this.setState({
+                errormessage: error.message
+            })
             // ...
           });
     }
@@ -40,6 +42,9 @@ class SignUp extends Component{
     render(){
         return(
             <div className='container'>
+                <h2>Create Your Account Here</h2>
+                <div class="dropdown-divider"></div>
+                <p className="text-danger">{this.state.errormessage? this.state.errormessage: ''}</p>
                 <form method="POST" onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label for="email">Email address:</label>
@@ -47,7 +52,8 @@ class SignUp extends Component{
                                 className="form-control" 
                                 placeholder="Enter email" 
                                 id="email"
-                                onChange={this.onEmailChange}        
+                                onChange={this.onEmailChange} 
+                                required       
                         />
                     </div>
                     <div class="form-group">
@@ -56,10 +62,11 @@ class SignUp extends Component{
                                 className="form-control" 
                                 placeholder="Enter password" 
                                 id="pwd"
-                                onChange={this.onPasswordChange}     
+                                onChange={this.onPasswordChange}
+                                required   
                     />
                     </div>
-                    <input type="submit" value="register"/>
+                    <input type="submit" className="btn btn-success" value="Register Account"/>
                 </form>
             </div>
         )

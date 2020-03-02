@@ -9,7 +9,7 @@ let JSON_PROFILE = require('../descriptors/profile.json');
 
 // Initial State
 const INIT_STATE = {
-  imageURL: null,
+  imageURL: 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
   fullDesc: null,
   detections: null,
   descriptors: null,
@@ -65,7 +65,6 @@ class ImageInput extends Component {
         this.state.faceMatcher.findBestMatch(descriptor)
       );
       this.setState({ match });
-      console.log(match)
     }
   };
 
@@ -138,7 +137,6 @@ class ImageInput extends Component {
           id="myFileUpload"
           type="file"
           onChange={this.handleFileChange}
-          accept=".jpg, .jpeg, .png"
         />
         <div style={{ position: 'absolute' }}>
           <div style={{ position: 'absolute' }}>

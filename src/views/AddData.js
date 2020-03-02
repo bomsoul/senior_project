@@ -7,7 +7,7 @@ import axios from 'axios';
 
 // Initial State
 const INIT_STATE = {
-  imageURL: null,
+  imageURL: 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg',
   fullDesc: null,
   detections: null,
   descriptors: null,
@@ -34,14 +34,12 @@ class AddData extends Component {
     
       handleImage = async (image = this.state.imageURL) => {
         await getFullFaceDescription(image).then(fullDesc => {
-          console.log(fullDesc[0].descriptor);
           if (!!fullDesc) {
             this.setState({
               fullDesc : fullDesc[0].descriptor,
               detections: fullDesc.map(fd => fd.detection)
             });
           }
-          //console.log(this.state.fullDesc[0]._descriptor);
         });
       };
     
@@ -128,8 +126,7 @@ class AddData extends Component {
         }
     
         return (
-          <center>
-            <div>
+            <div className="container">
             <input
               id="myFileUpload"
               type="file"
@@ -173,7 +170,6 @@ class AddData extends Component {
             </div>
             
           </div>
-          </center>
         );
       }
     }    

@@ -6,8 +6,7 @@ import '../css/login.css';
 import Class from './Class';
 import Header from '../components/Header';
 
-
-class Login extends Component{
+class Signin extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -148,7 +147,8 @@ class Login extends Component{
               </div>
           </div>
         </div>   
+        
         )
     }
 }
-export default Login;
+export default Signin;

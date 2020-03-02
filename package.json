@@ -5,6 +5,9 @@
   "license": "MIT",
   "homepage": "http://supachaic.github.io/bnk48-face-recognition",
   "dependencies": {
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "antd": "^4.0.0",
     "axios": "^0.19.0",
     "bootstrap": "^4.4.1",
     "express": "^4.17.1",

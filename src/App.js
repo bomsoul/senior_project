@@ -1,31 +1,64 @@
 import React, { Component } from 'react';
-import { Route,BrowserRouter as Router, Link,Switch } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
-// import "bootstrap/dist/css/bootstrap.min.css";
+import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import auth from './firebase/firebase';
 import './App.css';
+import Header from './components/Header';
 import Signin from './views/Signin';
 import SignUp from './views/SignUp';
 import Home from './views/Home';
 import ImageInput from './views/ImageInput';
 import cameraFaceDetect from './views/cameraFaceDetect';
 import AddData from './views/AddData';
+import Edit from './views/Edit';
 import 'antd/dist/antd.css';
 
+var user = auth.currentUser;
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      currentUser: user
+    }
+  }
+
+  componentDidMount(){
+    auth.onAuthStateChanged(user => {
+        if (user) {
+          this.setState({
+            currentUser: user
+          })
+        }
+    })
+}
   render() {
-    return (
-      <div className="container">
+    const {currentUser} = this.state;
+    if(currentUser){
+      return (
+        <div>
         <Router>
+          <React.Fragment>
+          <Header/>
+          <div className="container">
           <Switch>
-            <Route exact path='/' component={Signin}/>
-            <Route path='/signup' component={SignUp}/>
-            <Route path='/home' component={Home}/>
-            <Route path='/image' component={ImageInput}/>
-            <Route path='/camera' component={cameraFaceDetect}/>
-            <Route path='/addstudent' component={AddData}/>
+            <Route exact path="/" component={Home}/>
+            <Route path="/photo" component={ImageInput}/>
+            <Route path="/camera" component={cameraFaceDetect}/>
+            <Route path="/addstudent" component={AddData}/>
+            <Route path="/edit/:id" component={Edit}/>
           </Switch>
-        </Router>
+          </div>
+          </React.Fragment>
+      </Router>
       </div>
+      )
+    }
+    return (
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Signin}/>
+          <Route path="/signup" component={SignUp}/>
+        </Switch>
+      </Router>
     )
   }
 }

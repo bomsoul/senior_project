@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {Card,Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props){
     super(props);
     this.state = { 
@@ -15,7 +17,6 @@ export default class Home extends Component {
     'Access-Control-Allow-Methods':'GET'}})
       .then(function(res){
         res.data.forEach(doc=>{
-          console.log(doc);
           currentComponent.setState({
             url: [ ...currentComponent.state.url , doc ]
           })
@@ -27,14 +28,16 @@ export default class Home extends Component {
       <div className="container">
         <div className="row">
         {this.state.url.map((u , index)=> 
-        //<img key={index} src={u.urls} alt="hello my image" />
-        <div className="card" style={{width: '300px'}}>
-            <img className="card-img-top" key={index} src={u.imageURL} alt="Card image"/>
-            <div className="card-body" >
-                <h4 className="card-title">{u.name}</h4>
-                <h4 className="card-title">{u.stdId}</h4>
-            </div>
-        </div>
+        <Card style={{ width: '16rem' }}>
+        <Card.Img variant="top" src={u.imageURL} />
+        <Card.Body>
+          <Card.Title>{u.name}</Card.Title>
+          <Card.Text>
+            {u.stdId}
+          </Card.Text>
+          <Link to={'/edit/'+ u.id}><Button variant="outline-info">Edit Profile</Button></Link>
+        </Card.Body>
+      </Card>
         )}
         </div>
       </div>
@@ -42,3 +45,4 @@ export default class Home extends Component {
     );
   }
 }
+export default Home;

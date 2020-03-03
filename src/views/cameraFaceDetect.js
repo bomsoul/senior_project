@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
@@ -220,4 +219,4 @@ class CameraFaceDetect extends Component {
   }
 }
 
-export default withRouter(CameraFaceDetect);
+export default CameraFaceDetect;

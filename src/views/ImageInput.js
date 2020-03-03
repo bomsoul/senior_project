@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
 
@@ -50,13 +49,6 @@ class ImageInput extends Component {
           detections: fullDesc.map(fd => fd.detection),
           descriptors: fullDesc.map(fd => fd.descriptor)
         });
-        for(var object in JSON_PROFILE){
-          for(var obj in fullDesc){
-            if(JSON_PROFILE[object].descriptors.toString() == fullDesc[obj].descriptor.toString()){
-              console.log(JSON_PROFILE[object].name);
-            }
-          }
-        }
       }
     });
 
@@ -126,18 +118,16 @@ class ImageInput extends Component {
 
     return (
       
-      <center>
         <div>
-        <div>
+        <div className="text-center">
           {
             this.state.match == null ? <p>No face detect</p>:<p>{this.state.match.length} face detect</p>
           }
+          <input
+                  id="myFileUpload"
+                  type="file"
+                  onChange={this.handleFileChange} />
         </div>
-        <input
-          id="myFileUpload"
-          type="file"
-          onChange={this.handleFileChange}
-        />
         <div style={{ position: 'absolute' }}>
           <div style={{ position: 'absolute' }}>
             <img src={imageURL} alt="imageURL"  />
@@ -172,9 +162,8 @@ class ImageInput extends Component {
         </div>
 
       </div>
-      </center>
     );
   }
 }
 
-export default withRouter(ImageInput);
+export default ImageInput;

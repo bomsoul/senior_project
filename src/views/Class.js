@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import { Route, Switch,BrowserRouter as Router,Link } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
 import Home from '../views/Home';
 import ImageInput from '../views/ImageInput';
 import Header from '../components/Header';

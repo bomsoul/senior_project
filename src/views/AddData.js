@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
+import { loadModels, getFullFaceDescription } from '../api/face';
 import { storage } from '../firebase/firebase';
 import firebase from 'firebase';
-import axios from 'axios';
 
 // Initial State
 const INIT_STATE = {
@@ -80,7 +78,10 @@ class AddData extends Component {
         },
         () => {
             storage.ref('profile').child(image.name).getDownloadURL().then(url =>{
-                this.state.urllink = url.toString();
+              var urlx = url.toString();
+                this.setState({ 
+                  urllink : urlx
+                })
                 var data ={
                     imageURL: this.state.urllink,
                     name: this.state.name,
@@ -127,12 +128,13 @@ class AddData extends Component {
     
         return (
             <div className="container">
+            <div className="text-center">
             <input
-              id="myFileUpload"
-              type="file"
-              onChange={this.handleFileChange}
-              accept=".jpg, .jpeg, .png"
-            />
+                    id="myFileUpload"
+                    type="file"
+                    onChange={this.handleFileChange}
+                    accept=".jpg, .jpeg, .png"/>
+            </div>
             <div style={{ position: 'relative' }}>
               <div style={{ position: 'absolute' }}>
                 <img src={imageURL} alt="imageURL" />{
@@ -173,4 +175,4 @@ class AddData extends Component {
         );
       }
     }    
-export default withRouter(AddData);
+export default AddData;

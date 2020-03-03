@@ -1,10 +1,7 @@
 import React,{Component} from 'react';
 import auth from '../firebase/firebase';
-import { Route, BrowserRouter as Router, Link,Switch,useParams,
-    useRouteMatch } from 'react-router-dom';
 import '../css/login.css';
-import Class from './Class';
-import Header from '../components/Header';
+import App from '../App';
 
 class Signin extends Component{
     constructor(props){
@@ -70,28 +67,7 @@ class Signin extends Component{
         const { message, currentUser } = this.state
         if (currentUser) {
             return (
-              <div>
-                <div className="navbar navbar-expand-sm bg-dark navbar-dark">
-                  <ul className="navbar-nav">
-                    <li className="nav-item">
-                      <Link to="/home"><div className="nav-link">Home</div></Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/image"><div className="nav-link">Photo Input</div></Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/camera"><div className="nav-link">Video Camera</div></Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/addstudent"><div className="nav-link">Add Student</div></Link>
-                    </li>
-                    <li class="nav-item">
-                      <div className="nav-link">Hello {currentUser.email}</div>
-                    </li>
-                  </ul>
-                  <button className="btn btn-outline-secondary" onClick={this.logOut}>Logout</button>
-                </div>
-              </div>
+              <App/>
             )
           }
         return(
@@ -138,7 +114,7 @@ class Signin extends Component{
                         <div class="dropdown-divider"></div>
                         <div className="form-group">
                         <div className="text-center">
-                            <label>New around here ? <Link to="/signup">Sign Up</Link></label>
+                            <label>New around here ? <a href="/signup">Sign Up</a></label>
                         </div>
                       </div>
                     </div>
@@ -147,7 +123,6 @@ class Signin extends Component{
               </div>
           </div>
         </div>   
-        
         )
     }
 }

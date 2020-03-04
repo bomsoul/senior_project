@@ -12,19 +12,32 @@ const INIT_STATE = {
   fullDesc: null,
   detections: null,
   descriptors: null,
-  match: null
+  match: null,
 };
 
 class ImageInput extends Component {
   constructor(props) {
     super(props);
-    this.state = { ...INIT_STATE, faceMatcher: null };
+    this.state = { ...INIT_STATE, faceMatcher: null,
+      allstudent: [],
+      name: [] };
   }
 
   componentDidMount = async () =>{
     axios.get('https://seniorbackend1.herokuapp.com/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       JSON_PROFILE = response.data;
+    }).catch(function(error){
+      console.log(error)
+    })
+    axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*'}})
+    .then(response =>{
+      response.data.forEach(doc =>{
+        this.setState({ 
+          allstudent: [...this.state.allstudent,doc],
+          name: [...this.state.name,doc.name]
+        })
+      })
     }).catch(function(error){
       console.log(error)
     })
@@ -38,7 +51,7 @@ class ImageInput extends Component {
     JSON_PROFILE = profile.data
     await loadModels();
     this.setState({ faceMatcher: await createMatcher(JSON_PROFILE) });
-    await this.handleImage(this.state.imageURL);
+    // await this.handleImage(this.state.imageURL);
   };
 
   handleImage = async (image = this.state.imageURL) => {
@@ -142,11 +155,11 @@ class ImageInput extends Component {
                       <div className="card">
                           <div className="card-horizontal">
                               <div className="img-square-wrapper">
-                                  <img className="" src={key.imageURL} width="300" height="180" alt="Card image cap"/>
+                                  <img className="" src={this.state.allstudent[this.state.name.indexOf(key._label)].imageURL} width="120" height="120" alt="Card image cap"/>
                               </div>
                               <div className="card-body">
                                   <h4 className="card-title">{key._label}</h4>
-                                  <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                  <p className="card-text">{this.state.allstudent[this.state.name.indexOf(key._label)].stdId}</p>
                               </div>
                           </div>
                       </div>

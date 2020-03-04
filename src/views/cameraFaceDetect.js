@@ -21,7 +21,9 @@ class CameraFaceDetect extends Component {
       faceMatcher: null,
       match: null,
       facingMode: null,
-      matchList: []
+      matchList: [],
+      allstudent: [],
+      name: []
     };
   }
 
@@ -29,6 +31,17 @@ class CameraFaceDetect extends Component {
     axios.get('https://seniorbackend1.herokuapp.com/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       JSON_PROFILE = response.data;
+    }).catch(function(error){
+      console.log(error)
+    })
+    axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*'}})
+    .then(response =>{
+      response.data.forEach(doc =>{
+        this.setState({ 
+          allstudent: [...this.state.allstudent,doc],
+          name: [...this.state.name,doc.name]
+        })
+      })
     }).catch(function(error){
       console.log(error)
     })
@@ -202,11 +215,11 @@ class CameraFaceDetect extends Component {
                       <div className="card">
                           <div className="card-horizontal">
                               <div className="img-square-wrapper">
-                                  <img className="" src="" width="300" height="180" alt="Card image cap"/>
+                                  <img className="" src={this.state.allstudent[this.state.name.indexOf(match)].imageURL} width="120" height="120" alt="Card image cap"/>
                               </div>
                               <div className="card-body">
                                   <h4 className="card-title">{match}</h4>
-                                  <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                  <p className="card-text">{this.state.allstudent[this.state.name.indexOf(match)].stdId}</p>
                               </div>
                           </div>
                       </div>

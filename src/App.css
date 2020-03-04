@@ -2,3 +2,8 @@
     font-size:120%;
     animate: spin;
 }
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}

@@ -71,6 +71,7 @@ class Signin extends Component{
             )
           }
         return(
+          <div>
             <div className="justify-content-center align-items-center fluid">
               <div className="row">
                 <div class="col-md-12 min-vh-100 d-flex flex-column justify-content-center">
@@ -122,7 +123,7 @@ class Signin extends Component{
                 </div>
               </div>
           </div>
-        </div>   
+        </div></div>
         )
     }
 }

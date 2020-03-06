@@ -29,6 +29,7 @@ class SignUp extends Component{
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(function(res){
             alert('Register Complete!');
+            window.location.href = "/";
         })
         .catch(function(error) {
             // Handle Errors here.

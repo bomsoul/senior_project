@@ -21,6 +21,7 @@ class AddData extends Component {
             name : "",
             stdId: "",
             urllink: "",
+            qrcode : null
           
         };
       }
@@ -86,10 +87,10 @@ class AddData extends Component {
                     imageURL: this.state.urllink,
                     name: this.state.name,
                     stdId: this.state.stdId,
-                    descriptors: Array.from(this.state.fullDesc)
+                    descriptors: Array.from(this.state.fullDesc),
+                    classid: this.props.match.params.classid
                 }
                 db.collection("student").doc().set(data).then(function() {
-                  console.log("Document successfully written!");
                   alert("Add data Successful")
               });
             })

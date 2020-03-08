@@ -9,6 +9,10 @@ class Header extends Component {
     super(props);
     
   }
+
+  componentDidMount = e => {
+  console.log(this.props.id)
+  }
   logOut = e => {
     e.preventDefault()
     auth.signOut().then(response => {
@@ -26,16 +30,16 @@ class Header extends Component {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <LinkContainer exact to="/">
+            <LinkContainer exact to={"/room/"+this.props.id}>
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/photo">
+            <LinkContainer to={"/photo/"+this.props.id}>
               <Nav.Link>Photo Input</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/camera">
+            <LinkContainer to={"/camera/"+this.props.id}>
               <Nav.Link>Video Camera</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/addstudent">
+            <LinkContainer to={"/addstudent/"+this.props.id}>
               <Nav.Link>Add Student</Nav.Link>
             </LinkContainer>
           </Nav>

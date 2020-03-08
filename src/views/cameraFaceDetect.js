@@ -28,13 +28,14 @@ class CameraFaceDetect extends Component {
   }
 
   componentDidMount = async () =>{
-    axios.get('https://seniorbackend1.herokuapp.com/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://seniorbackend1.herokuapp.com/fetch/'+ this.props.match.params.classid,{headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       JSON_PROFILE = response.data;
     }).catch(function(error){
       console.log(error)
     })
-    axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*'
+                                                              ,'Access-Control-Allow-Methods':'GET'}})
     .then(response =>{
       response.data.forEach(doc =>{
         this.setState({ 
@@ -48,7 +49,7 @@ class CameraFaceDetect extends Component {
   }
 
   componentWillMount = async () => {
-    let profile = await axios.get('https://seniorbackend1.herokuapp.com/fetch',
+    let profile = await axios.get('https://seniorbackend1.herokuapp.com/fetch/'+ this.props.match.params.classid,
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
     JSON_PROFILE = profile.data

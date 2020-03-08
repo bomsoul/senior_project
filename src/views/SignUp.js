@@ -1,10 +1,12 @@
 import React,{Component} from 'react';
 import auth from '../firebase/firebase';
+import firebase from 'firebase';
 
 class SignUp extends Component{
     constructor(props){
         super(props);
         this.state = {
+            name : '',
             email : '',
             password : '',
             errormessage : '',
@@ -15,7 +17,6 @@ class SignUp extends Component{
         this.setState({
             email: e.target.value
         })
-        console.log(this.state.email)
     }
 
     onPasswordChange = (e) =>{
@@ -26,6 +27,11 @@ class SignUp extends Component{
 
     onSubmit = e =>{
         e.preventDefault();
+        firebase.firestore().collection('teacher').add({
+            name : this.state.name,
+            email: this.state.email,
+            password: this.state.password 
+        })
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(function(res){
             alert('Register Complete!');
@@ -37,7 +43,7 @@ class SignUp extends Component{
                 errormessage: error.message
             })
             // ...
-          });
+        });
     }
 
     render(){
@@ -51,7 +57,7 @@ class SignUp extends Component{
                         <label for="email">Email address:</label>
                         <input  type="email" 
                                 className="form-control" 
-                                placeholder="Enter email" 
+                                placeholder="example@mail.com" 
                                 id="email"
                                 onChange={this.onEmailChange} 
                                 required       

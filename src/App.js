@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import auth from './firebase/firebase';
 import './App.css';
-import Header from './components/Header';
+import Create from './views/Create';
 import Signin from './views/Signin';
 import SignUp from './views/SignUp';
-import Home from './views/Home';
-import ImageInput from './views/ImageInput';
-import cameraFaceDetect from './views/cameraFaceDetect';
+import Classroom from './views/Classroom';
 import AddData from './views/AddData';
-import Edit from './views/Edit';
+import Room from './views/Room';
 import 'antd/dist/antd.css';
 
 var user = auth.currentUser;
@@ -35,7 +33,19 @@ class App extends Component {
     if(currentUser){
       return (
         <div>
-        <Router>
+          <Router>
+            <Switch>
+              <Route exact path="/">
+                <Classroom user={currentUser}/>
+              </Route>
+              <Route path="/room/:id" component={Room}/>
+              <Route path="/create/:id" />
+              <Route exact path="/create">
+                <Create user={currentUser}/>
+              </Route>
+            </Switch>
+          </Router>
+        {/* <Router>
           <React.Fragment>
           <Header/>
           <div className="container">
@@ -48,7 +58,7 @@ class App extends Component {
           </Switch>
           </div>
           </React.Fragment>
-      </Router>
+      </Router> */}
       </div>
       )
     }
@@ -57,6 +67,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Signin}/>
           <Route path="/signup" component={SignUp}/>
+          <Route path="/addstudent/:classid" component={AddData}/>
         </Switch>
       </Router>
     )

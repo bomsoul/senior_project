@@ -24,13 +24,16 @@ class ImageInput extends Component {
   }
 
   componentDidMount = async () =>{
-    axios.get('https://seniorbackend1.herokuapp.com/fetch',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://seniorbackend1.herokuapp.com/fetch/'+this.props.match.params.classid,{
+      headers: {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods':'GET'}})
     .then(response =>{
       JSON_PROFILE = response.data;
+      console.log(JSON_PROFILE)
     }).catch(function(error){
       console.log(error)
     })
-    axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*'}})
+    axios.get('https://seniorbackend1.herokuapp.com/student',
+    {headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       response.data.forEach(doc =>{
         this.setState({ 
@@ -45,11 +48,11 @@ class ImageInput extends Component {
 
 
   componentWillMount = async () => {
-    let profile = await axios.get('https://seniorbackend1.herokuapp.com/fetch',
+    await loadModels();
+    let profile = await axios.get("https://seniorbackend1.herokuapp.com/fetch/"+this.props.match.params.classid,
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
     JSON_PROFILE = profile.data
-    await loadModels();
     this.setState({ faceMatcher: await createMatcher(JSON_PROFILE) });
     // await this.handleImage(this.state.imageURL);
   };
@@ -148,7 +151,7 @@ class ImageInput extends Component {
             this.state.match == null ? <h1></h1>:
             
             this.state.match.map((key,index)=>
-              key._label == 'unknown' ?  <b></b>: 
+              key._label === 'unknown' ?  <b></b>: 
               <div className="container-fluid">
               <div className="row">
                   <div className="col-12 mt-3">

@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {Card,Button} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
+import firebase from 'firebase';
 
 class Home extends Component {
+  _isMounted = false;
   constructor(props){
     super(props);
     this.state = { 
@@ -11,18 +13,26 @@ class Home extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount = () =>{
+    this._isMounted = true;
     let currentComponent = this;
+    let classid = this.props.match.params.classid;
     axios.get('https://seniorbackend1.herokuapp.com/student',{headers: {'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods':'GET'}})
       .then(function(res){
         res.data.forEach(doc=>{
-          currentComponent.setState({
-            url: [ ...currentComponent.state.url , doc ]
-          })
+          if(classid === doc.classid){
+            currentComponent.setState({
+              url: [ ...currentComponent.state.url , doc ]
+            })
+          }
         }) 
       })
-}
+  }
+
+  componentWillUnmount = () => {
+      this._isMounted = false;
+  }
   render() {
     return (
       <div className="container">

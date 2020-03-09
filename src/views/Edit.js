@@ -12,9 +12,12 @@ class Edit extends Component {
             imageURL: '',
             classId: '',
         }
+        this.onNameChange = this.onNameChange.bind(this);
+        this.onStdIdChange = this.onStdIdChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
-    componentDidMount = () =>{
+    componentDidMount(){
         store.collection('student').doc(this.props.match.params.id).get()
         .then(doc =>{
             this.setState({
@@ -26,19 +29,19 @@ class Edit extends Component {
         })
     }
 
-    onNameChange = (e) =>{
+    onNameChange(e){
         this.setState({ 
             name: e.target.value
         })
     }
 
-    onStdIdChange = (e) =>{
+    onStdIdChange(e){
         this.setState({ 
             stdId: e.target.value
         })
     }
 
-    onSubmit = (e) =>{
+    onSubmit(e){
         e.preventDefault();
         store.collection('student').doc(this.props.match.params.id)
         .update({
@@ -47,35 +50,43 @@ class Edit extends Component {
             imageURL: this.state.imageURL,
         })
         .then(() =>{
+            alert("Edit Success");
             window.location.href = "/room/"+this.state.classid;
         })
     }
 
     render(){
         return (
-            <Card>
-                <Card.Img variant="top" src={this.state.imageURL} />
-                <Card.Body>
-                <Card.Text>
-                <Form onSubmit={this.onSubmit}>
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Fullname:</Form.Label>
-                        <Form.Control type="text" onChange={this.onNameChange} value={this.state.name} placeholder="Enter your fullname" />
-                    </Form.Group>
-
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Student ID:</Form.Label>
-                        <Form.Control type="text" onChange={this.onStdIdChange} value={this.state.stdId} placeholder="Enter your Student ID" />
-                    </Form.Group>
-
-                    <Button variant="success" type="submit">
-                        Submit
-                    </Button>
-                    </Form>
-                </Card.Text>
-                </Card.Body>
-            </Card>
+            <CardComponent  student={this.state} 
+                            onSubmit={this.onSubmit} 
+                            onNameChange={this.onNameChangr}
+                            onStdIdChange={this.onStdIdChange}/>
         )
     }
 }
 export default Edit;
+
+const CardComponent = props =>(
+    <Card>
+        <Card.Img variant="top" src={props.student.imageURL} />
+        <Card.Body>
+        <Card.Text>
+        <Form onSubmit={props.onSubmit}>
+            <Form.Group controlId="formBasicEmail">
+                <Form.Label>Fullname:</Form.Label>
+                <Form.Control type="text" onChange={props.onNameChange} value={props.student.name} placeholder="Enter your fullname" />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+                <Form.Label>Student ID:</Form.Label>
+                <Form.Control type="text" onChange={props.onStdIdChange} value={props.student.stdId} placeholder="Enter your Student ID" />
+            </Form.Group>
+
+            <Button variant="success" type="submit">
+                Submit
+            </Button>
+            </Form>
+        </Card.Text>
+        </Card.Body>
+    </Card>
+)

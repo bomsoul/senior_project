@@ -24,14 +24,20 @@ class AddData extends Component {
             qrcode : null
           
         };
+        this.handleUpload = this.handleUpload.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleStdIdChange = this.handleStdIdChange.bind(this);
+        this.handleImage = this.handleImage.bind(this);
+        this.handleFileChange = this.handleFileChange.bind(this);
+        this.resetState = this.resetState.bind(this);
       }
     
-      componentWillMount = async () => {
+      async componentWillMount(){
         await loadModels();
         await this.handleImage(this.state.imageURL);
       };
     
-      handleImage = async (image = this.state.imageURL) => {
+      async handleImage(image){
         await getFullFaceDescription(image).then(fullDesc => {
           if (!!fullDesc) {
             this.setState({
@@ -42,7 +48,7 @@ class AddData extends Component {
         });
       };
     
-      handleFileChange = async event => {
+      async handleFileChange(event){
         this.resetState();
         if(event.target.files[0]){
             const image = event.target.files[0];
@@ -52,22 +58,22 @@ class AddData extends Component {
           imageURL: URL.createObjectURL(event.target.files[0]),
           loading: true
         });
-        this.handleImage();
+        this.handleImage(this.state.imageURL);
       };
     
-      handleNameChange = (e)=>{
+      handleNameChange(e){
         this.setState({
           name : e.target.value
         })
       }
 
-      handleStdIdChange = (e) =>{
+      handleStdIdChange(e){
         this.setState({
           stdId : e.target.value
         })
       }
     
-      handleUpload = () =>{
+      handleUpload(){
         const {image} = this.state;
         const uploadTask = storage.ref('profile/'+image.name).put(image);
         uploadTask.on('state_changed',
@@ -96,7 +102,7 @@ class AddData extends Component {
             })
         });
     }
-      resetState = () => {
+      resetState(){
         this.setState({ ...INIT_STATE });
       };
     
@@ -143,29 +149,12 @@ class AddData extends Component {
                 <img src={imageURL} alt="imageURL" />{
                     this.state.fullDesc == null ? <p></p> :<div>
                     <br/>
-                        <div className="form-inline">
-                            <label><b>Name :</b></label>
-                            <input type="text" 
-                                placeholder="Enter your fullname"
-                                name = "fullname"
-                                className ="form-control"
-                                onChange = {this.handleNameChange}
-                                value={this.state.name}
-                            />
-                        </div>
-                        <div className="form-inline">
-                            <label><b>Student ID :</b></label>
-                            <input type="text" 
-                                placeholder="Enter your studentID"
-                                name = "stdID"
-                                className ="form-control"
-                                onChange={this.handleStdIdChange}
-                                value={this.state.stdId }
-                            />
-                        </div>
-                        <button className="btn btn-success" onClick={this.handleUpload}>Add to Database</button>
-                </div>
-                    
+                        <Form   name={this.state.name} 
+                                stdId={this.state.stdId} 
+                                handleUpload={this.handleUpload}
+                                handleNameChange={this.handleNameChange}
+                                handleStdIdChange={this.handleStdIdChange}/>
+                    </div>
                 }
               </div>
               {!!drawBox ? drawBox : null}
@@ -179,3 +168,29 @@ class AddData extends Component {
       }
     }    
 export default AddData;
+
+const Form = props => (
+  <div>
+    <div className="form-inline">
+      <label><b>Name :</b></label>
+      <input type="text" 
+          placeholder="Enter your fullname"
+          name = "fullname"
+          className ="form-control"
+          onChange = {props.handleNameChange}
+          value={props.name}
+      />
+  </div>
+      <div className="form-inline">
+          <label><b>Student ID :</b></label>
+          <input type="text" 
+              placeholder="Enter your studentID"
+              name = "stdID"
+              className ="form-control"
+              onChange={props.handleStdIdChange}
+              value={ props.stdId }
+          />
+      </div>
+      <button className="btn btn-success" onClick={props.handleUpload}>Add to Database</button>
+  </div>
+)

@@ -27,9 +27,14 @@ class ImageInput extends Component {
       present: [],
       absent: []
     };
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.handleImage = this.handleImage.bind(this);
+    this.handleShow = this.handleShow.bind(this);
+    this.addItem = this.addItem.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
 
-  componentDidMount = async () =>{
+  async componentDidMount(){
     axios.get('https://seniorbackend1.herokuapp.com/fetch/'+this.props.match.params.classid,{
       headers: {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods':'GET'}})
     .then(response =>{
@@ -55,7 +60,7 @@ class ImageInput extends Component {
   }
 
 
-  componentWillMount = async () => {
+  async componentWillMount(){
     await loadModels();
     let profile = await axios.get("https://seniorbackend1.herokuapp.com/fetch/"+this.props.match.params.classid,
                               {headers: {'Access-Control-Allow-Origin': '*',
@@ -65,7 +70,7 @@ class ImageInput extends Component {
     // await this.handleImage(this.state.imageURL);
   };
 
-  handleImage = async (image = this.state.imageURL) => {
+  async handleImage (image){
     await getFullFaceDescription(image).then(fullDesc => {
       if (!!fullDesc) {
         this.setState({
@@ -88,20 +93,20 @@ class ImageInput extends Component {
   };
 
 
-  handleFileChange = async event => {
+  async handleFileChange(event){
     this.resetState();
     await this.setState({
       imageURL: URL.createObjectURL(event.target.files[0]),
       loading: true
     });
-    this.handleImage();
+    this.handleImage(this.state.imageURL);
   };
 
-  resetState = () => {
+  resetState(){
     this.setState({ ...INIT_STATE });
   };
 
-  handleShow = () =>{
+  handleShow(){
     this.setState({ open: true });
   }
 
@@ -197,23 +202,8 @@ class ImageInput extends Component {
             
             this.state.match.map((key,index)=>
               key._label === 'unknown' ?  <b></b>: 
-              <div className="container-fluid">
-              <div className="row">
-                  <div className="col-12 mt-3">
-                      <div className="card">
-                          <div className="card-horizontal">
-                              <div className="img-square-wrapper">
-                                  <img className="" src={this.state.allstudent[this.state.name.indexOf(key._label)].imageURL} width="120" height="120" alt="Card image cap"/>
-                              </div>
-                              <div className="card-body">
-                                  <h4 className="card-title">{key._label}</h4>
-                                  <p className="card-text">{this.state.allstudent[this.state.name.indexOf(key._label)].stdId}</p>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+              <Item allstudent={this.state.allstudent} name={this.state.name} label={key._label}/>
+              
             )
           }
           </div>
@@ -261,4 +251,24 @@ const ModalComponent = ({open, hide , absent}) => (
       </Button>
     </Modal.Footer>
   </Modal>
+)
+
+const Item = props =>(
+  <div className="container-fluid">
+      <div className="row">
+          <div className="col-12 mt-3">
+              <div className="card">
+                  <div className="card-horizontal">
+                      <div className="img-square-wrapper">
+                          <img className="" src={props.allstudent[props.name.indexOf(props.label)].imageURL} width="120" height="120" alt="Card image cap"/>
+                      </div>
+                      <div className="card-body">
+                          <h4 className="card-title">{props.label}</h4>
+                          <p className="card-text">{props.allstudent[props.name.indexOf(props.label)].stdId}</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 )

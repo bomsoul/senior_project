@@ -29,9 +29,15 @@ class CameraFaceDetect extends Component {
       present: [],
       absent: []
     };
+    this.setInputDevice = this.setInputDevice.bind(this);
+    this.startCapture = this.startCapture.bind(this);
+    this.capture = this.capture.bind(this);
+    this.onDetect = this.onDetect.bind(this);
+    this.handleShow = this.handleShow.bind(this);
+    this.addItem = this.addItem.bind(this);
   }
 
-  componentDidMount = async () =>{
+  async componentDidMount(){
     axios.get('https://seniorbackend1.herokuapp.com/fetch/'+ this.props.match.params.classid,{headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       JSON_PROFILE = response.data;
@@ -55,7 +61,7 @@ class CameraFaceDetect extends Component {
     })
   }
 
-  componentWillMount = async () => {
+  async componentWillMount(){
     let profile = await axios.get('https://seniorbackend1.herokuapp.com/fetch/'+ this.props.match.params.classid,
                               {headers: {'Access-Control-Allow-Origin': '*',
                               'Access-Control-Allow-Methods':'GET'}})
@@ -65,7 +71,7 @@ class CameraFaceDetect extends Component {
     this.setInputDevice();
   };
 
-  setInputDevice = () => {
+  setInputDevice(){
     navigator.mediaDevices.enumerateDevices().then(async devices => {
       let inputDevice = await devices.filter(
         device => device.kind === 'videoinput'
@@ -83,7 +89,7 @@ class CameraFaceDetect extends Component {
     });
   };
 
-  startCapture = () => {
+  startCapture(){
     this.interval = setInterval(() => {
       this.capture();
     }, 1500);
@@ -93,7 +99,7 @@ class CameraFaceDetect extends Component {
     clearInterval(this.interval);
   }
 
-  capture = async () => {
+  async capture(){
     if (!!this.webcam.current) {
       await getFullFaceDescription(
         this.webcam.current.getScreenshot(),
@@ -117,7 +123,7 @@ class CameraFaceDetect extends Component {
   };
 
 
-  onDetect = (index) =>{
+  onDetect(index){
     if(index !== 'unknown'){
       if(this.state.matchList.indexOf(index) <= -1){
         this.setState({
@@ -128,7 +134,7 @@ class CameraFaceDetect extends Component {
     }
   }
 
-  handleShow = () =>{
+  handleShow(){
     this.setState({ open: true });
   }
 
@@ -140,8 +146,9 @@ class CameraFaceDetect extends Component {
         present: [...this.state.present,this.state.allstudent[x]]
       })
       let absentstudent =[]
+      let present = this.state.present;
       this.state.allstudent.forEach(student =>{
-        if(this.state.present.findIndex(obj => obj.name ===student.name) < 0){
+        if(present.findIndex(obj => obj.name ===student.name) < 0){
             absentstudent.push(student)
         }
       })
@@ -251,23 +258,9 @@ class CameraFaceDetect extends Component {
             {!!drawBox ? drawBox : null}
           </div>
         </div>
-            {Array.from(this.state.matchList).map((match, index) =><div className="container-fluid">
-              <div className="row">
-                  <div className="col-12 mt-3">
-                      <div className="card">
-                          <div className="card-horizontal">
-                              <div className="img-square-wrapper">
-                                  <img className="" src={this.state.allstudent[this.state.name.indexOf(match)].imageURL} width="120" height="120" alt="Card image cap"/>
-                              </div>
-                              <div className="card-body">
-                                  <h4 className="card-title">{match}</h4>
-                                  <p className="card-text">{this.state.allstudent[this.state.name.indexOf(match)].stdId}</p>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>)}
+            {Array.from(this.state.matchList).map((match, index) =>
+              <Item allstudent={this.state.allstudent} name={this.state.name} label={match}/>
+              )}
       </div>
       </div>
     );
@@ -308,4 +301,24 @@ const ModalComponent = ({open, hide , absent}) => (
       </Button>
     </Modal.Footer>
   </Modal>
+)
+
+const Item = props => (
+  <div className="container-fluid">
+    <div className="row">
+          <div className="col-12 mt-3">
+              <div className="card">
+                  <div className="card-horizontal">
+                      <div className="img-square-wrapper">
+                          <img src={props.allstudent[props.name.indexOf(props.label)].imageURL} width="120" height="120" alt="Card image cap"/>
+                      </div>
+                      <div className="card-body">
+                          <h4 className="card-title">{props.label}</h4>
+                          <p className="card-text">{props.allstudent[props.name.indexOf(props.label)].stdId}</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 )

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {Card, Button, InputGroup, Form} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import firebase from 'firebase';
 
 class Home extends Component {
   _isMounted = false;
@@ -12,9 +11,10 @@ class Home extends Component {
       url: [],
       item: []
     }
+    this.filterList = this.filterList.bind(this);
   }
 
-  componentDidMount = () =>{
+  componentDidMount(){
     this._isMounted = true;
     let currentComponent = this;
     let classid = this.props.match.params.classid;
@@ -32,11 +32,11 @@ class Home extends Component {
       })
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount(){
       this._isMounted = false;
   }
 
-  filterList = (e) => {
+  filterList(e){
     let items = this.state.url;
     this.setState({word: e.target.value});
     items = items.filter((item) => {
@@ -45,12 +45,47 @@ class Home extends Component {
     this.setState({item: items});
   }
 
+  listStudent(){
+    return this.state.item.sort((a,b) =>a.stdId - b.stdId).map(function(student,i){
+      return <CardComponent student={student}/>
+    })
+  }
+
   render() {
     return (
       <div className="container">
         <br/>
         <div className="row justify-content-center align-items-center">
-        <Form.Group md="4">
+          <Search onClick={this.filterList}/>
+        </div>
+        <br/>
+        <div className="row">
+        {
+          this.listStudent()
+        }
+        </div>
+      </div>
+       
+    );
+  }
+}
+export default Home;
+
+const CardComponent = ({student}) => (
+  <Card style={{ width: '16rem' }}>
+    <Card.Img variant="top" src={student.imageURL} />
+    <Card.Body>
+      <Card.Title>{student.name}</Card.Title>
+      <Card.Text>
+        {student.stdId}
+      </Card.Text>
+      <Link to={'/edit/'+ student.id}><Button variant="outline-info">Edit Profile</Button></Link>
+    </Card.Body>
+  </Card>
+)
+
+const Search = ({onClick}) =>(
+  <Form.Group md="4">
         <InputGroup>
             <InputGroup.Prepend>
                 <InputGroup.Text>
@@ -60,29 +95,8 @@ class Home extends Component {
             <Form.Control
                 type="text"
                 placeholder="Search here..."
-                onChange={this.filterList}
+                onChange={onClick}
             />
         </InputGroup>
         </Form.Group>
-        </div>
-        <br/>
-        <div className="row">
-        {this.state.item.sort((a,b) =>a.stdId - b.stdId).map((u , index)=> 
-        <Card style={{ width: '16rem' }}>
-        <Card.Img variant="top" src={u.imageURL} />
-        <Card.Body>
-          <Card.Title>{u.name}</Card.Title>
-          <Card.Text>
-            {u.stdId}
-          </Card.Text>
-          <Link to={'/edit/'+ u.id}><Button variant="outline-info">Edit Profile</Button></Link>
-        </Card.Body>
-      </Card>
-        )}
-        </div>
-      </div>
-       
-    );
-  }
-}
-export default Home;
+)

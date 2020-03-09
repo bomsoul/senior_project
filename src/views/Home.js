@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {Card,Button} from 'react-bootstrap';
+import {Card, Button, InputGroup, Form} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import firebase from 'firebase';
 
@@ -9,7 +9,8 @@ class Home extends Component {
   constructor(props){
     super(props);
     this.state = { 
-      url: []
+      url: [],
+      item: []
     }
   }
 
@@ -23,7 +24,8 @@ class Home extends Component {
         res.data.forEach(doc=>{
           if(classid === doc.classid){
             currentComponent.setState({
-              url: [ ...currentComponent.state.url , doc ]
+              url: [ ...currentComponent.state.url , doc ],
+              item: [ ...currentComponent.state.url , doc ]
             })
           }
         }) 
@@ -33,11 +35,39 @@ class Home extends Component {
   componentWillUnmount = () => {
       this._isMounted = false;
   }
+
+  filterList = (e) => {
+    let items = this.state.url;
+    this.setState({word: e.target.value});
+    items = items.filter((item) => {
+      return (item.stdId.toLowerCase().search(e.target.value.toLowerCase()) !== -1 || item.name.toLowerCase().search(e.target.value.toLowerCase()) !== -1);
+    });
+    this.setState({item: items});
+  }
+
   render() {
     return (
       <div className="container">
+        <br/>
+        <div className="row justify-content-center align-items-center">
+        <Form.Group md="4">
+        <InputGroup>
+            <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <i class="fas fa-search"></i>
+                </InputGroup.Text>
+            </InputGroup.Prepend>
+            <Form.Control
+                type="text"
+                placeholder="Search here..."
+                onChange={this.filterList}
+            />
+        </InputGroup>
+        </Form.Group>
+        </div>
+        <br/>
         <div className="row">
-        {this.state.url.sort((a,b) =>a.stdId - b.stdId).map((u , index)=> 
+        {this.state.item.sort((a,b) =>a.stdId - b.stdId).map((u , index)=> 
         <Card style={{ width: '16rem' }}>
         <Card.Img variant="top" src={u.imageURL} />
         <Card.Body>

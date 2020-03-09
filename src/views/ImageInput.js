@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
+import { Modal, Button, Table } from 'react-bootstrap';
 
 // Import face profile
 let JSON_PROFILE = require('../descriptors/profile.json');
-
 
 // Initial State
 const INIT_STATE = {
@@ -15,12 +15,18 @@ const INIT_STATE = {
   match: null,
 };
 
+
+
 class ImageInput extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INIT_STATE, faceMatcher: null,
       allstudent: [],
-      name: [] };
+      name: [],
+      open: false,
+      present: [],
+      absent: []
+    };
   }
 
   componentDidMount = async () =>{
@@ -28,7 +34,6 @@ class ImageInput extends Component {
       headers: {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods':'GET'}})
     .then(response =>{
       JSON_PROFILE = response.data;
-      console.log(JSON_PROFILE)
     }).catch(function(error){
       console.log(error)
     })
@@ -36,10 +41,13 @@ class ImageInput extends Component {
     {headers: {'Access-Control-Allow-Origin': '*'}})
     .then(response =>{
       response.data.forEach(doc =>{
-        this.setState({ 
-          allstudent: [...this.state.allstudent,doc],
-          name: [...this.state.name,doc.name]
-        })
+        if(doc.classid === this.props.match.params.classid){
+          this.setState({ 
+            allstudent: [...this.state.allstudent,doc],
+            name: [...this.state.name,doc.name],
+            absent: [...this.state.allstudent,doc]
+          })
+        }
       })
     }).catch(function(error){
       console.log(error)
@@ -73,6 +81,9 @@ class ImageInput extends Component {
         this.state.faceMatcher.findBestMatch(descriptor)
       );
       this.setState({ match });
+      this.state.match.forEach(match =>{
+        this.addItem(match._label);
+      })
     }
   };
 
@@ -90,8 +101,32 @@ class ImageInput extends Component {
     this.setState({ ...INIT_STATE });
   };
 
+  handleShow = () =>{
+    this.setState({ open: true });
+  }
+
+
+  addItem(item) {
+    var x = this.state.allstudent.findIndex(obj => obj.name ===item)
+    if(this.state.present.findIndex(obj => obj.name ===item) < 0){
+      this.setState({
+        present: [...this.state.present,this.state.allstudent[x]]
+      })
+      let absentstudent =[]
+      this.state.allstudent.forEach(student =>{
+        if(this.state.present.findIndex(obj => obj.name ===student.name) < 0){
+            absentstudent.push(student)
+        }
+      })
+      this.setState({
+        absent: absentstudent
+      })
+    }
+  }
+
   render() {
     const { imageURL, detections, match } = this.state;
+
     let drawBox = null;
     if (!!detections) {
       drawBox = detections.map((detection, i) => {
@@ -139,10 +174,20 @@ class ImageInput extends Component {
           {
             this.state.match == null ? <p>No face detect</p>:<p>{this.state.match.length} face detect</p>
           }
-          <input
+          <div className="text-center">
+            <input
                   id="myFileUpload"
                   type="file"
                   onChange={this.handleFileChange} />
+          </div>
+          <div className="text-right">
+            <Button variant="outline-secondary" onClick={this.handleShow}>
+              See Absent Student
+            </Button>
+          </div>
+        <div className="fluid-container">
+            <ModalComponent fluid open={this.state.open} hide={() => this.setState({open: false})} absent={this.state.absent} />
+          </div>
         </div>
         <div style={{ position: 'absolute' }}>
           <div style={{ position: 'absolute' }}>
@@ -183,3 +228,37 @@ class ImageInput extends Component {
 }
 
 export default ImageInput;
+
+const ModalComponent = ({open, hide , absent}) => (
+  <Modal show={open} onHide={hide}>
+    <Modal.Header closeButton>
+      <Modal.Title>Absent Student</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Fullname</th>
+          </tr>
+        </thead>
+        <tbody>
+            {
+              absent.sort((a,b) =>a.stdId - b.stdId)
+              .map((student,index)=>
+                <tr>
+                  <td>{student.stdId}</td>
+                  <td>{student.name}</td>
+                </tr>
+              )
+            }
+        </tbody>
+      </Table>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="danger" onClick={hide}>
+        Close
+      </Button>
+    </Modal.Footer>
+  </Modal>
+)

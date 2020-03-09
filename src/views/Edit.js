@@ -9,7 +9,8 @@ class Edit extends Component {
             id: '',
             name : '',
             stdId: '',
-            imageURL: ''
+            imageURL: '',
+            classId: '',
         }
     }
 
@@ -20,6 +21,7 @@ class Edit extends Component {
                 name : doc.data().name,
                 stdId: doc.data().stdId,
                 imageURL: doc.data().imageURL,
+                classid: doc.data().classid
             })
         })
     }
@@ -39,9 +41,13 @@ class Edit extends Component {
     onSubmit = (e) =>{
         e.preventDefault();
         store.collection('student').doc(this.props.match.params.id)
-        .update(this.state)
+        .update({
+            name : this.state.name,
+            stdId: this.state.stdId,
+            imageURL: this.state.imageURL,
+        })
         .then(() =>{
-            window.location.href = "/";
+            window.location.href = "/room/"+this.state.classid;
         })
     }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Webcam from 'react-webcam';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
+import { Button, Modal, Table } from 'react-bootstrap';
 
 // Import face profile
 let JSON_PROFILE = require('../descriptors/profile.json');
@@ -23,7 +24,10 @@ class CameraFaceDetect extends Component {
       facingMode: null,
       matchList: [],
       allstudent: [],
-      name: []
+      name: [],
+      open: false,
+      present: [],
+      absent: []
     };
   }
 
@@ -38,10 +42,13 @@ class CameraFaceDetect extends Component {
                                                               ,'Access-Control-Allow-Methods':'GET'}})
     .then(response =>{
       response.data.forEach(doc =>{
-        this.setState({ 
-          allstudent: [...this.state.allstudent,doc],
-          name: [...this.state.name,doc.name]
-        })
+        if(doc.classid === this.props.match.params.classid){
+          this.setState({ 
+            allstudent: [...this.state.allstudent,doc],
+            name: [...this.state.name,doc.name],
+            absent: [...this.state.allstudent,doc]
+          })
+        }
       })
     }).catch(function(error){
       console.log(error)
@@ -116,9 +123,34 @@ class CameraFaceDetect extends Component {
         this.setState({
           matchList: [...this.state.matchList,index]
         })
+        this.addItem(index);
       }
     }
   }
+
+  handleShow = () =>{
+    this.setState({ open: true });
+  }
+
+
+  addItem(item) {
+    var x = this.state.allstudent.findIndex(obj => obj.name ===item)
+    if(this.state.present.findIndex(obj => obj.name ===item) < 0){
+      this.setState({
+        present: [...this.state.present,this.state.allstudent[x]]
+      })
+      let absentstudent =[]
+      this.state.allstudent.forEach(student =>{
+        if(this.state.present.findIndex(obj => obj.name ===student.name) < 0){
+            absentstudent.push(student)
+        }
+      })
+      this.setState({
+        absent: absentstudent
+      })
+    }
+  }
+
 
   render() {
     const { detections, match, facingMode } = this.state;
@@ -179,6 +211,15 @@ class CameraFaceDetect extends Component {
     }
 
     return (
+      <div>
+          <div className="text-right">
+            <Button variant="outline-secondary" onClick={this.handleShow}>
+              See Absent Student
+            </Button>
+          </div>
+          <div className="fluid-container">
+            <ModalComponent fluid open={this.state.open} hide={() => this.setState({open: false})} absent={this.state.absent} />
+          </div>
       <div
         className="Camera"
         style={{
@@ -228,9 +269,43 @@ class CameraFaceDetect extends Component {
               </div>
           </div>)}
       </div>
-      
+      </div>
     );
   }
 }
 
 export default CameraFaceDetect;
+
+const ModalComponent = ({open, hide , absent}) => (
+  <Modal show={open} onHide={hide}>
+    <Modal.Header closeButton>
+      <Modal.Title>Absent Student</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Fullname</th>
+          </tr>
+        </thead>
+        <tbody>
+            {
+              absent.sort((a,b) =>a.stdId - b.stdId)
+              .map((student,index)=>
+                <tr>
+                  <td>{student.stdId}</td>
+                  <td>{student.name}</td>
+                </tr>
+              )
+            }
+        </tbody>
+      </Table>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="danger" onClick={hide}>
+        Close
+      </Button>
+    </Modal.Footer>
+  </Modal>
+)

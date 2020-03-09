@@ -129,6 +129,8 @@ class AddData extends Component {
     
         return (
             <div className="container">
+              <br/>
+              <p><b>Note :</b>&nbsp;Please Upload Your Single Picture and wait until the detect box appear then add your record and submit</p>
             <div className="text-center">
             <input
                     id="myFileUpload"

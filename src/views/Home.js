@@ -37,7 +37,7 @@ class Home extends Component {
     return (
       <div className="container">
         <div className="row">
-        {this.state.url.map((u , index)=> 
+        {this.state.url.sort((a,b) =>a.stdId - b.stdId).map((u , index)=> 
         <Card style={{ width: '16rem' }}>
         <Card.Img variant="top" src={u.imageURL} />
         <Card.Body>

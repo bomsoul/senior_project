@@ -145,16 +145,19 @@ class CameraFaceDetect extends Component {
       this.setState({
         present: [...this.state.present,this.state.allstudent[x]]
       })
-      let absentstudent =[]
-      let present = this.state.present;
-      this.state.allstudent.forEach(student =>{
-        if(present.findIndex(obj => obj.name ===student.name) < 0){
-            absentstudent.push(student)
-        }
-      })
-      this.setState({
-        absent: absentstudent
-      })
+      // let absentstudent =[]
+      // let present = this.state.present;
+      // this.state.allstudent.forEach(student =>{
+      //   if(present.findIndex(obj => obj.name ===student.name) < 0){
+      //       absentstudent.push(student)
+      //   }
+      // })
+      // this.setState({
+      //   absent: absentstudent
+      // })
+      this.setState({absent: this.state.absent.filter(function(student) { 
+        return student.name !== item 
+      })});
     }
   }
 

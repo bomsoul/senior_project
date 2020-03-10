@@ -260,7 +260,7 @@ const Item = props =>(
               <div className="card">
                   <div className="card-horizontal">
                       <div className="img-square-wrapper">
-                          <img className="" src={props.allstudent[props.name.indexOf(props.label)].imageURL} width="120" height="120" alt="Card image cap"/>
+                          <img src={props.allstudent[props.name.indexOf(props.label)].imageURL} width="120" height="120" alt="Card image cap"/>
                       </div>
                       <div className="card-body">
                           <h4 className="card-title">{props.label}</h4>

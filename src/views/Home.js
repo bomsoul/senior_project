@@ -4,7 +4,6 @@ import {Card, Button, InputGroup, Form} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 class Home extends Component {
-  _isMounted = false;
   constructor(props){
     super(props);
     this.state = { 
@@ -32,9 +31,6 @@ class Home extends Component {
       })
   }
 
-  componentWillUnmount(){
-      this._isMounted = false;
-  }
 
   filterList(e){
     let items = this.state.url;

@@ -21,6 +21,7 @@ class ClassHeader extends Component {
         })
         window.location.href = "/";
       }
+      
     render(){
         return(
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">

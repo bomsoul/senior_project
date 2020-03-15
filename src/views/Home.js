@@ -82,17 +82,17 @@ const CardComponent = ({student}) => (
 
 const Search = ({onClick}) =>(
   <Form.Group md="4">
-        <InputGroup>
-            <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <i class="fas fa-search"></i>
-                </InputGroup.Text>
-            </InputGroup.Prepend>
-            <Form.Control
-                type="text"
-                placeholder="Search here..."
-                onChange={onClick}
-            />
-        </InputGroup>
-        </Form.Group>
+    <InputGroup>
+        <InputGroup.Prepend>
+            <InputGroup.Text>
+              <i class="fas fa-search"></i>
+            </InputGroup.Text>
+        </InputGroup.Prepend>
+        <Form.Control
+            type="text"
+            placeholder="Search here..."
+            onChange={onClick}
+        />
+    </InputGroup>
+  </Form.Group>
 )

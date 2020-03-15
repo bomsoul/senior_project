@@ -45,20 +45,6 @@ class App extends Component {
               </Route>
             </Switch>
           </Router>
-        {/* <Router>
-          <React.Fragment>
-          <Header/>
-          <div className="container">
-          <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/photo" component={ImageInput}/>
-            <Route path="/camera" component={cameraFaceDetect}/>
-            <Route path="/addstudent" component={AddData}/>
-            <Route path="/edit/:id" component={Edit}/>
-          </Switch>
-          </div>
-          </React.Fragment>
-      </Router> */}
       </div>
       )
     }

@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { loadModels, getFullFaceDescription, createMatcher } from '../api/face';
 import axios from 'axios';
-import { Modal, Button, Table } from 'react-bootstrap';
+import { Modal, Button, Table, Tabs, Tab } from 'react-bootstrap';
 
 // Import face profile
 let JSON_PROFILE = require('../descriptors/profile.json');
@@ -185,27 +185,61 @@ class ImageInput extends Component {
                   type="file"
                   onChange={this.handleFileChange} />
           </div>
-          <div className="text-right">
-            <Button variant="outline-secondary" onClick={this.handleShow}>
-              See Absent Student
-            </Button>
-          </div>
-        <div className="fluid-container">
-            <ModalComponent fluid open={this.state.open} hide={() => this.setState({open: false})} absent={this.state.absent} />
-          </div>
         </div>
         <div style={{ position: 'absolute' }}>
           <div style={{ position: 'absolute' }}>
-            <img src={imageURL} alt="imageURL"  />
-            {
-            this.state.match == null ? <h1></h1>:
-            
-            this.state.match.map((key,index)=>
-              key._label === 'unknown' ?  <b></b>: 
-              <Item allstudent={this.state.allstudent} name={this.state.name} label={key._label}/>
-              
-            )
-          }
+            <img src={imageURL} alt="imageURL"/>
+            <div className="fluid-container">
+            <Tabs defaultActiveKey="Present" transition={false} id="noanim-tab-example">
+              <Tab eventKey="Present" title="Present">
+                {
+                  this.state.present.length !== 0? this.state.present.sort((a,b) =>a.stdId - b.stdId).map((key,index)=>
+                  key._label === 'unknown' ?  <b></b>: 
+                  <div>
+                    <Item student={key}/>
+                  </div>
+                ) :<p>No one in class.</p>
+
+                }
+              </Tab>
+              <Tab eventKey="Absent" title="Absent">
+                {
+                  this.state.absent !== null ? this.state.absent.sort((a,b) =>a.stdId - b.stdId).map((key,index)=>
+                  key._label === 'unknown' ?  <b></b>: 
+                    <Item student={key}/>
+                  ) :<p>Everone is in the class.</p> 
+                }
+              </Tab>
+              <Tab eventKey="All Result" title="All Result">
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Student ID</th>
+                      <th>Fullname</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {
+                    this.state.allstudent.sort((a,b) =>a.stdId - b.stdId).map((student, index)=>
+                      <tr>
+                        <td>{student.stdId}</td>
+                        <td>{student.name}</td>
+                        <td>{this.state.present.indexOf(student) >= 0 ? <div className="text-success"><i class="fas fa-check"></i></div>: <div className="text-danger"><i class="fas fa-times"></i></div>}</td>
+                      </tr>
+                    )                    
+                  }
+                  <tr>
+                    <td><b>Total :</b></td>
+                    <td></td>
+                  <td>Present : {this.state.present.length}<br/>
+                      Absent : {this.state.absent.length}</td>
+                  </tr>
+                  </tbody>
+                  </Table>
+              </Tab>
+            </Tabs>
+            </div>
           </div>
           {!!drawBox ? drawBox : null}
         </div>
@@ -253,18 +287,18 @@ const ModalComponent = ({open, hide , absent}) => (
   </Modal>
 )
 
-const Item = props =>(
+const Item = ({student}) =>(
   <div className="container-fluid">
       <div className="row">
           <div className="col-12 mt-3">
               <div className="card">
                   <div className="card-horizontal">
                       <div className="img-square-wrapper">
-                          <img src={props.allstudent[props.name.indexOf(props.label)].imageURL} width="120" height="120" alt="Card image cap"/>
+                          <img src={student.imageURL} width="120" height="120" alt="Card image cap"/>
                       </div>
                       <div className="card-body">
-                          <h4 className="card-title">{props.label}</h4>
-                          <p className="card-text">{props.allstudent[props.name.indexOf(props.label)].stdId}</p>
+                          <h4 className="card-title">{student.name}</h4>
+                          <p className="card-text">{student.stdId}</p>
                       </div>
                   </div>
               </div>

@@ -13,6 +13,7 @@ const INIT_STATE = {
 };
 
 const db=firebase.firestore();
+
 class AddData extends Component {
     constructor(props) {
         super(props);

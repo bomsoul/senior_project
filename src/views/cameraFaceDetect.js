@@ -278,7 +278,13 @@ class CameraFaceDetect extends Component {
                       <tr>
                         <td>{student.stdId}</td>
                         <td>{student.name}</td>
-                        <td>{this.state.present.indexOf(student) >= 0 ? <div className="text-success"><i class="fas fa-check"></i></div>: <div className="text-danger"><i class="fas fa-times"></i></div>}</td>
+                        <td>{this.state.present.indexOf(student) >= 0 ? <div className="text-success">
+                          <i class="fas fa-check"></i>
+                          </div>: 
+                          <div className="text-danger">
+                            <i class="fas fa-times">
+                              </i></div>}
+                          </td>
                       </tr>
                     )                    
                   }

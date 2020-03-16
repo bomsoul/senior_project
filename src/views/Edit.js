@@ -15,6 +15,7 @@ class Edit extends Component {
         this.onNameChange = this.onNameChange.bind(this);
         this.onStdIdChange = this.onStdIdChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
 
     componentDidMount(){
@@ -55,12 +56,28 @@ class Edit extends Component {
         })
     }
 
+    onDelete(e){
+        store.collection('student').doc(this.props.match.params.id).delete()
+        .then(()=>{
+            alert("This User has been deleted");
+            window.location.href = "/room/"+this.state.classid;
+        });
+    }
+
     render(){
         return (
-            <CardComponent  student={this.state} 
+            <div>
+                <div class="text-right">
+                    <Button variant="outline-danger" onClick={this.onDelete}>
+                        Delete this student
+                    </Button>
+                </div>
+                <CardComponent  student={this.state} 
                             onSubmit={this.onSubmit} 
                             onNameChange={this.onNameChangr}
                             onStdIdChange={this.onStdIdChange}/>
+            </div>
+            
         )
     }
 }
@@ -81,10 +98,10 @@ const CardComponent = props =>(
                 <Form.Label>Student ID:</Form.Label>
                 <Form.Control type="text" onChange={props.onStdIdChange} value={props.student.stdId} placeholder="Enter your Student ID" />
             </Form.Group>
-
-            <Button variant="success" type="submit">
-                Submit
-            </Button>
+        
+                <Button variant="success" type="submit">
+                    Submit
+                </Button>
             </Form>
         </Card.Text>
         </Card.Body>

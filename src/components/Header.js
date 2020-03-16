@@ -5,14 +5,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 
 class Header extends Component {
-  constructor(props){
-    super(props);
-    
-  }
 
-  componentDidMount = e => {
-  console.log(this.props.id)
-  }
   logOut = e => {
     e.preventDefault()
     auth.signOut().then(response => {
